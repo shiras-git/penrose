@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { Breadcrumb, BreadcrumbItem,
             Button, Row, Col, Label } from 'reactstrap';
-import { Control, LocalForm, Errors } from 'react-redux-form';
 import { Link } from 'react-router-dom';
+import { Control, Form, Errors, actions } from 'react-redux-form';
 
 class Contact extends Component {
     
@@ -10,18 +10,18 @@ class Contact extends Component {
         super(props);
 
             this.state = {
-            firstname: '',
-            lastname: '',
-            telnum: '',
-            email: '',
-            agree: false,
-            contactType: 'Tel.',
-            message: '',
-            touched: {
-                firstname: false,
-                lastname: false,
-                telnum: false,
-                email: false
+                firstname: '',
+                lastname: '',
+                telnum: '',
+                email: '',
+                agree: false,
+                contactType: 'Tel.',
+                message: '',
+                touched: {
+                    firstname: false,
+                    lastname: false,
+                    telnum: false,
+                    email: false
             }
         };
 
@@ -77,9 +77,13 @@ class Contact extends Component {
         });
     }
 
-     handleSubmit(values) {
+    handleSubmit(values) {
+        this.props.postFeedback(values.fistname, values.lastname, 
+                                values.telnum, values.email, values.agree,
+                                values.contactType, values.message);
         console.log('Current State is: ' + JSON.stringify(values));
         alert('Current State is: ' + JSON.stringify(values));
+        this.props.resetFeedbackForm();
         // event.preventDefault();
     }
     
@@ -106,7 +110,7 @@ class Contact extends Component {
                       <h3>Send us your Feedback</h3>
                    </div>
                     <div className="col-12 col-md-9">
-                        <LocalForm onSubmit={(values) => this.handleSubmit(values)}>
+                        <Form model="feedback" onSubmit={(values) => this.handleSubmit(values)}>
                             <Row className="form-group">
                                 <Label htmlFor="firstname" md={2}>First Name</Label>
                                 <Col md={10}>
@@ -229,7 +233,7 @@ class Contact extends Component {
                                     </Button>
                                 </Col>
                             </Row>
-                        </LocalForm>
+                        </Form>
                     </div>
                </div>
                 <div className="row row-content">
